@@ -1,0 +1,10 @@
+main {
+  width: 100vw;
+  min-height: 70vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background: linear-gradient(225deg, #ff7edf7c, #7a7aff85, #7afff472);
+}  
+

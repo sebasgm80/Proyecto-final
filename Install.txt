@@ -23,3 +23,8 @@ npm i jsonwebtoken
     "dev": "nodemon index.js"
   },
 
+React
+
+npm create vite@latest nombre-proyecto
+npm i
+npm run dev
