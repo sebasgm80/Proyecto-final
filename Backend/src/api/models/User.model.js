@@ -31,7 +31,7 @@ const UserSchema = new mongoose.Schema(
       type: String,
     },
     wallet: {
-      type: Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: 'Wallet'
     },
     bookCoins: {
