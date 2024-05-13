@@ -1,145 +1,55 @@
-header {
-    min-height: 20vh;
-    width: 100vw;
-    background: linear-gradient(225deg, #ff7edf, #7a7bff, #7afff5);
-    background-size: 600% 600%;
-    animation: GradientMove 16s ease infinite;
-    color: #ffffff;
+.transparent-header {
     display: flex;
     align-items: center;
-    justify-content: center;
-    box-shadow: 10px 10px 10px rgba(0,0,0,0.5);
-
-}
-
-
-
-.titleHeaderBlack {
-    position: absolute;
-    color: white;
-    top: 2px;
-}
-
-.titleContainer {
-    color: #183f35;
-    width: 360px;
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: space-between;
+    height: 10vh;
+    padding: 0 30px;
 }
 
 .titleFatherContainer {
-    color: #183f35;
-    width: 360px;
+    flex-grow: 0;
     display: flex;
-    justify-content: center;
+    justify-content: center; 
     align-items: center;
 }
 
 .logo {
-    width: 100px;
-    border-radius: 25%;
-    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
+    height: 80%;
+    width: 10rem;
+    object-fit: contain;
 }
 
-.iconNav {
-    width: 70px;
-}
-
-
-
-nav {
-    display: flex;
-    gap: 1rem;
-}
-
-.whiteContainer {
-    width: 100vw;
-    height: 1vh;
-    background-color: rgb(255, 255, 255);
-}
-
-.iconLogout {
-    
-    width: 70px;
-    
-    
-   
-    
-}
-
-.profileCircle {
-    width: 53px;
-    height: 53px;
-    object-fit: cover;
-    border-radius: 10%;
-    border: solid black 2px;
-    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
-}
-
-a {
+.nav-container {
     display: flex;
     align-items: center;
-    justify-content: center;
+    gap: 10px;
 }
 
-.iconDashBoard {
-    width: 70px;
-    
-    
+.btn {
+    padding: 8px 16px;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    background-color: transparent;
+    color: rgb(0, 0, 0);
+    border-radius: 0%;
+    transition: background-color 0.3s ease;
 }
 
-@media (max-width: 700px) {
-    header {
-        flex-direction: column;
-    }
-
-    .logo {
-        width: 50px;
-    }
-
-    .titleFatherContainer {
-        width: 263px;
-    }
-}
-@keyframes GradientMove {
-    0% {background-position: 0% 50%}
-    50% {background-position: 100% 50%}
-    100% {background-position: 0% 50%}
+.btn:hover {
+    background-color: #0b909d;
 }
 
-.tooltip-text1 {
-    visibility: hidden;
-    width: auto;
-    background-color: black;
-    color: white;
-    text-align: center;
-    border-radius: 6px;
-    padding: 5px;
-    position: absolute;
-    z-index: 1;
-    bottom: 5rem;
-    left: 50%;
-    transform: translateX(-50%);
-    white-space: nowrap;
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
-  
-  .iconNav:hover + .tooltip-text1 {
-    visibility: visible;
-    opacity: 1;
-  }
 
-  .profileCircle:hover {
-    background-color: #6762b6;
-    transition: 0.3s;
-    transform: scale(1.01);
-    box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.5);
-  }
 
-  .profileCircle:hover + .tooltip-text1 {
-    visibility: visible;
-    opacity: 1;
-  }
+.profileCircle {
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    transition: filter 0.3s ease; /* Transición suave para el filtro */
+}
+
+.profileCircle:hover {
+    filter:blur(2px)/* Aplica un desenfoque suave cuando el ratón está encima */
+}

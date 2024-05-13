@@ -32,10 +32,10 @@ app.use(express.urlencoded({ limit: "5mb", extended: false }));
 const UserRoutes = require("./src/api/routes/User.routes");
 app.use("/api/v1/users/", UserRoutes);
 
-/* const CarRoutes = require("./src/api/routes/Car.routes");
-app.use("/api/v1/Cars/", CarRoutes);
+const BookRoutes = require("./src/api/routes/Book.routes");
+app.use("/api/v1/books/", BookRoutes);
 
-const CompanyRoutes = require("./src/api/routes/Company.routes");
+/* const CompanyRoutes = require("./src/api/routes/Company.routes");
 app.use("/api/v1/Companys/", CompanyRoutes);
 
 const MessageRoutes = require("./src/api/routes/Message.routes");

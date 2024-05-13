@@ -1,20 +1,11 @@
 footer {
     min-height: 10vh;
     width: 100vw;
-    background: linear-gradient(225deg, #ff7edf, #7a7bff, #7afff5);
-    background-size: 600% 600%;
-    animation: GradientMove 16s ease infinite;
-    color: #ffffff;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-@keyframes GradientMove {
-    0% {background-position: 0% 50%}
-    50% {background-position: 100% 50%}
-    100% {background-position: 0% 50%}
-}
 
 .footer-links {
     margin-top: 10px;

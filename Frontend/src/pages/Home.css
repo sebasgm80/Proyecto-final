@@ -1,0 +1,51 @@
+/* Home.css */
+.hero {
+    position: relative;
+    width: 100%;
+    color: #000000; /* Ajusta el color de texto según tu diseño */
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    
+}
+
+.hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('https://res.cloudinary.com/dikiljqbn/image/upload/v1715541627/Biblioteca_atu7sq.webp') no-repeat center center/cover;
+    z-index: -1;
+}
+
+.hero-content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    background-color: rgb(132, 185, 255);
+    z-index: 2;
+    padding: 20px;
+    box-shadow: 0 0 300px rgba(0, 0, 0, 0.8);
+}
+
+.join-now-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: rgb(0, 0, 0);
+    background-color: #13bc89; /* Color de fondo para el botón */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.join-now-button:hover {
+    background-color: #054d2c; /* Color más oscuro para el hover */
+}
