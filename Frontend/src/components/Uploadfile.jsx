@@ -1,3 +1,4 @@
+import "./Uploadfile.css";
 import { useEffect } from "react";
 
 export const Uploadfile = () => {

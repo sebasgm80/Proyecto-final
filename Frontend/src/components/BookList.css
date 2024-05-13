@@ -1,0 +1,42 @@
+.books-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; /* Añade espacio entre las tarjetas de libros */
+    justify-content: center; /* Centra las tarjetas de libros horizontalmente */
+    padding: 20px; /* Espacio alrededor del contenedor */
+}
+
+.book-card {
+    display: flex;
+    flex-direction: row; /* Alinea los elementos horizontalmente */
+    align-items: center; /* Centra los elementos verticalmente */
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    border-radius: 8px; /* Bordes redondeados para la tarjeta */
+    overflow: hidden; /* Asegura que todo quede dentro de los bordes redondeados */
+    width: 100%; /* Ajusta esto según la disposición deseada */
+    max-width: 640px; /* Máximo ancho de la tarjeta */
+}
+
+.book-card img {
+    width: 120px; /* Ancho fijo para la imagen */
+    height: auto; /* Altura automática para mantener la proporción */
+    object-fit: cover; /* Cubre el área asignada sin perder proporción */
+}
+
+.book-info {
+    padding: 10px 20px; /* Espacio alrededor del texto dentro de la tarjeta */
+    flex-grow: 1; /* Ocupa todo el espacio disponible en la tarjeta */
+}
+
+.book-info h3 {
+    margin: 0; /* Elimina márgenes por defecto */
+    color: #333; /* Color de texto para el título */
+    font-size: 1.2rem; /* Tamaño de fuente para el título */
+}
+
+.book-info p {
+    margin-top: 5px; /* Espacio entre el título y los Bookoins */
+    font-size: 1rem; /* Tamaño de fuente para los Bookoins */
+    color: #666; /* Color de texto para los Bookoins */
+}

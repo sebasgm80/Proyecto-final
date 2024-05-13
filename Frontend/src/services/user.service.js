@@ -46,3 +46,15 @@ export const updateUser = async (formData) => {
     .then((res) => res)
     .catch((error) => error);
 };
+
+// Obtener los bookoins del usuario
+export const getUserBookoins = async () => {
+  try {
+      const response = await APIuser.get("/user/bookoins");
+      updateToken(response.headers); // Actualizar el token si es necesario
+      return response.data; // Retornar los datos directamente
+  } catch (error) {
+      console.error("Error fetching user's bookoins:", error.response ? error.response.data : error.message);
+      throw error;
+  }
+}

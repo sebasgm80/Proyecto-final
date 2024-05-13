@@ -2,7 +2,7 @@ const Book = require("../models/Book.model");
 const User = require("../models/User.model");
 
 const calcularBookoins = (pages) => {
-    return pages * 0.5; // Lógica para calcular los Bookoins
+    return pages * 0.1; // Lógica para calcular los Bookoins
 };
 
 const createBook = async (req, res) => {
@@ -35,8 +35,37 @@ const createBook = async (req, res) => {
     }
 };
 
+const getById = async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const bookById = await Book.findById(id);
+      if (bookById) {
+        return res.status(200).json(bookById);
+      } else {
+        return res.status(404).json("no se ha encontrado el libro");
+      }
+    } catch (error) {
+      return res.status(404).json(error.message);
+    }
+  };
+
+  const getAllBooksForUser = async (req, res) => {
+    const userId = req.user._id;
+
+    try {
+        const user = await User.findById(userId).populate('library');
+        if (!user) {
+            return res.status(404).json({ message: "Usuario no encontrado" });
+        }
+        return res.status(200).json(user.library);
+    } catch (error) {
+        return res.status(500).json({ message: "Error al obtener los libros del usuario", error: error.message });
+    }
+};
 
 
 module.exports = {
-    createBook
+    createBook,
+    getById,
+    getAllBooksForUser
 };

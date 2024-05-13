@@ -4,6 +4,8 @@
     justify-content: space-between;
     height: 10vh;
     padding: 0 30px;
+    font-family: monospace;
+    font-size: 1rem;
 }
 
 .titleFatherContainer {
@@ -15,7 +17,7 @@
 
 .logo {
     height: 80%;
-    width: 10rem;
+    width: 10rem; /* Considera hacer este tamaño más adaptable */
     object-fit: contain;
 }
 
@@ -29,7 +31,7 @@
     padding: 8px 16px;
     border: none;
     cursor: pointer;
-    font-size: 20px;
+    font-size: 20px; /* Ajusta según el tamaño de la pantalla */
     background-color: transparent;
     color: rgb(0, 0, 0);
     border-radius: 0%;
@@ -40,8 +42,6 @@
     background-color: #0b909d;
 }
 
-
-
 .profileCircle {
     height: 50px;
     width: 50px;
@@ -51,5 +51,47 @@
 }
 
 .profileCircle:hover {
-    filter:blur(2px)/* Aplica un desenfoque suave cuando el ratón está encima */
+    filter: blur(2px); /* Aplica un desenfoque suave cuando el ratón está encima */
+}
+
+/* Media Queries para responsividad */
+
+@media (max-width: 768px) {
+    .transparent-header {
+        padding: 0 10px; /* Reduce el padding en dispositivos más pequeños */
+        height: 30vh; /* Aumenta la altura para más espacio vertical */
+    }
+
+    .nav-container {
+        flex-direction: column; /* Cambia la dirección a columna */
+        gap: 5px;
+    }
+
+    .logo {
+        width: 10rem; /* Reduce el tamaño del logo */
+    }
+
+    .btn {
+        font-size: 16px; /* Reduce el tamaño de la fuente para los botones */
+    }
+}
+
+@media (max-width: 480px) {
+    .transparent-header {
+        padding: 0 10px;
+        flex-direction:row; /* Cambia la disposición del header a columna */
+        justify-content: space-between;
+        height: 30vh;
+    }
+
+    .titleFatherContainer {
+        order: 1; /* Asegúrate de que el título vaya arriba si cambias la dirección a columna */
+    }
+
+    .nav-container {
+        height: fit-content;
+        flex-grow: 0;
+        order: 2; /* Posiciona la navegación después del título/logo */
+        justify-content: space-between; /* Distribuye los elementos uniformemente */
+    }
 }

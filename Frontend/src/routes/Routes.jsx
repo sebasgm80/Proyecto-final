@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router-dom"
 import  { App } from "../App"
-import { AddBook, Dashboard, Error, FormProfile, Home, Login, Profile, Register,  } from "../pages"
+import { AddBook, Dashboard, Error, FormProfile, Home, Login, Profile, Register, BookDetails  } from "../pages"
 import { Protected } from "../components/ProtectedREoutes/Protected"
 
 
@@ -50,6 +50,14 @@ export const router = createBrowserRouter ([
                 element: (
                     <Protected>
                         <AddBook />
+                    </Protected>
+                )
+            },
+            {
+                path: "/book/:bookId",
+                element: (
+                    <Protected>
+                        <BookDetails />
                     </Protected>
                 )
             },

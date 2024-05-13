@@ -71,7 +71,7 @@ export const Register = () => {
     return (
     <>
         <div className="form-wrap">
-            <h1>Sign Up</h1>
+            <h1>Crea tu cuenta</h1>
             <p>Es gratis y solo te tomara un minuto</p>
             <form onSubmit={handleSubmit(formSubmit)}>
             <div className="user_container form-group">
@@ -137,7 +137,7 @@ export const Register = () => {
         </div>
         <div className="footerForm">
             <p className="parrafoLogin">
-            ¿Tienes una cuenta? <Link to="/login">Login Here</Link>
+            ¿Tienes una cuenta? <Link to="/login">Login here</Link>
             </p>
         </div>
     </>

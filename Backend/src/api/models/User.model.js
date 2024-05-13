@@ -30,9 +30,13 @@ const UserSchema = new mongoose.Schema(
     image: {
       type: String,
     },
+    wallet: {
+      type: Schema.Types.ObjectId,
+      ref: 'Wallet'
+    },
     bookCoins: {
       type: Number,
-      default: 0,
+      default: 100,
     },
     library: [{
       type: mongoose.Schema.Types.ObjectId,
