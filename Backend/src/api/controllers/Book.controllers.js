@@ -84,11 +84,77 @@ const getAllBooks = async (req, res, next) => {
   }
 };
 
+const purchaseBook = async (req, res) => {
+  const { id } = req.params;
+  const buyerId = req.user._id; // Suponiendo que el ID del usuario comprador se obtiene del token
+
+  try {
+    const book = await Book.findById(id).populate('author');
+    if (!book) {
+      return res.status(404).json({ message: 'Libro no encontrado' });
+    }
+
+    const seller = await User.findById(book.userId);
+    const buyer = await User.findById(buyerId);
+
+    // Lógica de notificación al vendedor y solicitud de confirmación
+    // Esto puede ser a través de WebSockets, notificaciones push, etc.
+
+    // Por ahora, simplemente devolvemos una respuesta de éxito
+    return res.status(200).json({ message: 'Solicitud de compra enviada' });
+  } catch (error) {
+    console.error('Error al realizar la compra:', error);
+    return res.status(500).json({
+      error: 'Error al realizar la compra',
+      message: error.message,
+    });
+  }
+};
+
+const confirmPurchase = async (req, res) => {
+  const { id } = req.params;
+  const sellerId = req.user._id; // Suponiendo que el ID del usuario vendedor se obtiene del token
+
+  try {
+    const book = await Book.findById(id);
+    if (!book) {
+      return res.status(404).json({ message: 'Libro no encontrado' });
+    }
+
+    if (book.userId.toString() !== sellerId.toString()) {
+      return res.status(403).json({ message: 'No tienes permiso para confirmar esta compra' });
+    }
+
+    const buyer = await User.findById(book.requestedBy);
+
+    // Actualizar los BookCoins
+    buyer.BookCoins -= book.Bookoins;
+    seller.BookCoins += book.Bookoins;
+
+    await buyer.save();
+    await seller.save();
+
+    // Confirmar la compra
+    book.userId = buyer._id;
+    book.requestedBy = null;
+    await book.save();
+
+    return res.status(200).json({ message: 'Compra confirmada' });
+  } catch (error) {
+    console.error('Error al confirmar la compra:', error);
+    return res.status(500).json({
+      error: 'Error al confirmar la compra',
+      message: error.message,
+    });
+  }
+};
 
 
 module.exports = {
     createBook,
     getById,
     getAllBooksForUser,
-    getAllBooks
+    getAllBooks,
+    purchaseBook,
+    confirmPurchase
 };

@@ -47,3 +47,14 @@ export const getAllBooks = async () => {
       throw new Error(error.response?.data?.message || 'Error retrieving books');
     }
   };
+
+  // Realizar una compra de un libro
+export const purchaseBook = async (bookId) => {
+    try {
+      const response = await APIuser.post(`/books/${bookId}/purchase`);
+      return response.data;
+    } catch (error) {
+      console.error('Error purchasing book:', error.response ? error.response.data : error.message);
+      throw new Error(error.response?.data?.message || 'Error purchasing book');
+    }
+  };

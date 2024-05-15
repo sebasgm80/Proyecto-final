@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getAllBooks } from '../services/book.service';
+import { getAllBooks, purchaseBook } from '../services/book.service';
 import { useAuth } from "../context/authContext";
 import "./AllBooks.css";
 import { Link } from 'react-router-dom';
@@ -9,6 +9,7 @@ const AllBooks = () => {
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [message, setMessage] = useState('');
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -31,8 +32,19 @@ const AllBooks = () => {
     fetchBooks();
   }, [user]);
 
+  const handlePurchase = async (bookId) => {
+    try {
+      const response = await purchaseBook(bookId);
+      const book = books.find(book => book._id === bookId);
+      setMessage(`Solicitud de compra enviada para el libro: ${book.title}`);
+    } catch (error) {
+      setError(<h3>Error: {error.message}</h3>);
+    }
+  };
+
   if (loading) return <div className="loading-message">Cargando libros...</div>;
   if (error) return <div className="error-message">{error}</div>;
+  if (message) return <div className="message">{message}</div>;
 
   return (
     <div className="all-books-container">
@@ -42,14 +54,16 @@ const AllBooks = () => {
           {books.map((book) => (
             <li key={book._id} className="book-card">
               <Link to={`/book/${book._id}`}>
-              {book.image && <img src={book.image} alt={book.title} />}
+                {book.image && <img src={book.image} alt={book.title} />}
               </Link>
               <h2>{book.title}</h2>
               <p className="author">Autor: {book.author?.name || 'Desconocido'}</p>
               <p>Género: {book.genre || 'Desconocido'}</p>
-              <p>Año: {book.year || 'Desconocido'}</p>
-              <p>Páginas: {book.pages}</p>
+              <p>Año: {book.year || 'Desconocido'}</p> 
               <p>BookCoins: {book.Bookoins}</p>
+              {user && book.userId !== user._id && (
+                <button onClick={() => handlePurchase(book._id)}>Comprar</button>
+              )}
             </li>
           ))}
         </ul>

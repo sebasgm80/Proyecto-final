@@ -8,19 +8,27 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    list-style: none;
+    list-style:circle;
     padding: 0;
   }
   
   .book-card {
+    display: flex;
+    flex-direction:row;
+    align-items: center;
+    text-align: center;
+    
+    
+    transition: transform 0.2s;
+
     background-color: #f9f9f9;
     border: 1px solid #ddd;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin: 10px;
     padding: 20px;
-    width: 250px;
-    transition: transform 0.2s;
+    
+    
   }
   
   .book-card:hover {
