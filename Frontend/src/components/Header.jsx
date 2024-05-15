@@ -19,6 +19,10 @@ export const Header = () => {
                 <NavLink to="/">
                     <button className="btn btn-transparent">Home</button>
                 </NavLink>
+                <NavLink to="/Books">
+                    <button className="btn btn-transparent">Libros</button>
+                </NavLink>
+
                 {user ? (
                     <>
                         <NavLink to="/dashboard">

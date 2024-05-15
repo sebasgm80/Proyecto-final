@@ -3,6 +3,10 @@ const { deleteImgCloudinary } = require("../../middleware/files.middleware");
 
 //! ---------------------------- modelos ----------------------------------
 const User = require("../models/User.model");
+const Wallet = require("../models/Wallet.model");
+const Book = require("../models/Book.model")
+
+
 
 //! ---------------------------- utils ----------------------------------
 const randomCode = require("../../utils/randomCode");
@@ -21,6 +25,7 @@ const setError = require("../../helpers/handle-error");
 const { generateToken } = require("../../utils/token");
 const randomPassword = require("../../utils/randomPassword");
 const enumOk = require("../../utils/enumOk");
+const { mongoose } = require("mongoose");
 
 dotenv.config();
 
@@ -37,42 +42,47 @@ const register = async (req, res, next) => {
 
   try {
     await User.syncIndexes();
-    const { email, name } = req.body;
+    const { email } = req.body;
 
-    const userExist = await User.findOne(
-      { email: req.body.email },
-      { name: req.body.name }
-    );
+    const userExist = await User.findOne({ email });
 
     if (!userExist) {
-      const newUser = new User({ ...req.body });
-
-      if (req.file) {
-        newUser.image = req.file.path;
-      } else {
-        newUser.image = "https://pic.onlinewebfonts.com/svg/img_181369.png";
-      }
+      const newUser = new User({ ...req.body, image: req.file ? req.file.path : "https://pic.onlinewebfonts.com/svg/img_181369.png" });
 
       try {
         const userSave = await newUser.save();
 
-        if (userSave) {
-          return res.status(200).json({
-            user: userSave,
-          });
-        }
+        // Crear wallet para el nuevo usuario
+        const newWallet = new Wallet({
+          userId: userSave._id,
+          balance: 100  // Cada nueva wallet comienza con 100 BookCoins
+        });
+        const walletSave = await newWallet.save();
+
+        // Actualizar usuario con el ID de la wallet
+        await User.findByIdAndUpdate(userSave._id, { wallet: walletSave._id });
+
+        // Devuelve la respuesta con el usuario y su wallet
+        return res.status(200).json({
+          user: await User.findById(userSave._id).populate('wallet'),  // Cargar los datos de la wallet
+          wallet: walletSave
+        });
+
       } catch (error) {
+        if (req.file) deleteImgCloudinary(catchImg);
         return res.status(404).json(error.message);
       }
     } else {
       if (req.file) deleteImgCloudinary(catchImg);
-      return res.status(409).json("this user already exist");
+      return res.status(409).json("This user already exists");
     }
   } catch (error) {
     if (req.file) deleteImgCloudinary(catchImg);
     return next(error);
   }
 };
+
+
 
 
 
@@ -418,20 +428,50 @@ const update = async (req, res, next) => {
 //! -----------------------------------------------------------------------------
 
 const deleteUser = async (req, res, next) => {
+  const session = await mongoose.startSession(); // Iniciar una sesión de transacción
   try {
+    session.startTransaction();
     const { _id, image } = req.user;
-    await User.findByIdAndDelete(_id);
-    if (await User.findById(_id)) {
-      // si el usuario
-      return res.status(404).json("not deleted"); ///
-    } else {
-      deleteImgCloudinary(image);
-      return res.status(200).json("ok delete");
+
+    // Eliminar la wallet asociada
+    await Wallet.findOneAndDelete({ userId: _id }, { session });
+
+    // Obtener todos los libros del usuario para eliminar las imágenes
+    const userBooks = await Book.find({ userId: _id });
+
+    // Eliminar todos los libros asociados
+    await Book.deleteMany({ ownerId: _id }, { session });
+
+    // Eliminar el usuario
+    const userDeleteResult = await User.findByIdAndDelete(_id, { session });
+    if (!userDeleteResult) {
+      await session.abortTransaction();
+      session.endSession();
+      return res.status(404).json("User not found or not deleted");
     }
+
+    // Eliminar la imagen del usuario de Cloudinary si es necesario
+    if (image) {
+      await deleteImgCloudinary(image);
+    }
+
+    // Eliminar las imágenes de los libros del usuario de Cloudinary
+    for (const book of userBooks) {
+      if (book.image) {
+        await deleteImgCloudinary(book.image);
+      }
+    }
+
+    await session.commitTransaction(); // Confirmar todas las operaciones
+    session.endSession();
+    return res.status(200).json("User, wallet, and books deleted successfully");
   } catch (error) {
+    await session.abortTransaction();
+    session.endSession();
     return next(error);
   }
 };
+
 
 //! -----------------------------------------------------------------------------
 //? ---------------------------------FOLLOW USER--------------------------------------

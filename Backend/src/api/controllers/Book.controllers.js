@@ -12,7 +12,8 @@ const createBook = async (req, res) => {
         const newBook = new Book({
             ...req.body,
             image: req.file ? catchimg : "https://pic.onlinewebfonts.com/svg/img_181369.png",
-            Bookoins: calcularBookoins(req.body.pages)
+            Bookoins: calcularBookoins(req.body.pages),
+            userId: req.user._id,
         });
 
         const saveBook = await newBook.save();
@@ -50,6 +51,9 @@ const getById = async (req, res, next) => {
   };
 
   const getAllBooksForUser = async (req, res) => {
+    if (!req.user || !req.user._id) {
+        return res.status(403).json({ message: "No se ha proporcionado información de autenticación válida." });
+    }
     const userId = req.user._id;
 
     try {
@@ -63,9 +67,28 @@ const getById = async (req, res, next) => {
     }
 };
 
+const getAllBooks = async (req, res, next) => {
+  try {
+    const allBooks = await Book.find().populate('author', 'name');
+    /** el find nos devuelve un array */
+    if (allBooks.length > 0) {
+      return res.status(200).json(allBooks);
+    } else {
+      return res.status(404).json("No se han encontrado libros");
+    }
+  } catch (error) {
+    return res.status(500).json({
+      error: "Error al buscar - lanzado en el catch",
+      message: error.message,
+    });
+  }
+};
+
+
 
 module.exports = {
     createBook,
     getById,
-    getAllBooksForUser
+    getAllBooksForUser,
+    getAllBooks
 };

@@ -31,7 +31,7 @@
     padding: 8px 16px;
     border: none;
     cursor: pointer;
-    font-size: 20px; /* Ajusta según el tamaño de la pantalla */
+    font-size: 20px;
     background-color: transparent;
     color: rgb(0, 0, 0);
     border-radius: 0%;
@@ -81,7 +81,7 @@
         padding: 0 10px;
         flex-direction:row; /* Cambia la disposición del header a columna */
         justify-content: space-between;
-        height: 30vh;
+        height: 35vh;
     }
 
     .titleFatherContainer {
@@ -93,5 +93,12 @@
         flex-grow: 0;
         order: 2; /* Posiciona la navegación después del título/logo */
         justify-content: space-between; /* Distribuye los elementos uniformemente */
+    }
+
+    .profileCircle {
+        display: flex;
+        justify-content: left;
+        
+        
     }
 }

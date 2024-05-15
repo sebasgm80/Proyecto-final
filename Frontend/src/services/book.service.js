@@ -1,5 +1,7 @@
+import axios from "axios";
 import { updateToken } from "../utils";
 import { APIuser } from "./serviceApiUser.config";
+
 
 // Create a new product
 export const createBook = async (formData) => {
@@ -35,3 +37,13 @@ export const getBookDetails = async (bookId) => {
 };
 
 
+// Obtener todos los libros
+export const getAllBooks = async () => {
+    try {
+      const response = await APIuser.get('/books');
+      return response.data;
+    } catch (error) {
+      console.error('Error retrieving books:', error.response ? error.response.data : error.message);
+      throw new Error(error.response?.data?.message || 'Error retrieving books');
+    }
+  };

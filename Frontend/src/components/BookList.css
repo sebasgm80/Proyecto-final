@@ -40,3 +40,20 @@
     font-size: 1rem; /* Tamaño de fuente para los Bookoins */
     color: #666; /* Color de texto para los Bookoins */
 }
+
+h3 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 1rem; /* Para centrar verticalmente en toda la pantalla */
+    background-color: #3e8b69;
+    color: rgb(0, 0, 0);
+    font-size: 18px;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: fit-content;
+    margin: auto;
+    box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.5);
+    text-align: center;
+}

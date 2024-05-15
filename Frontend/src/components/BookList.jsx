@@ -13,7 +13,7 @@ const BooksList = () => {
             try {
                 const booksData = await getUserBooks();
                 if (booksData.length === 0) {
-                    setError('No tienes libros en tu biblioteca aún.'); // Caso específico para biblioteca vacía
+                    setError(<h3>No tienes libros en tu biblioteca.<Link to="/addProduct">Agrega tu primer libro.</Link></h3>);
                 } else {
                     setBooks(booksData);
                 }
@@ -38,7 +38,7 @@ const BooksList = () => {
             <img src={book.image || 'path/to/default-image.jpg'} alt={`Portada de ${book.title}`} />
             </Link>
             <div className="book-info">
-                <h3>{book.title}</h3>
+                <h2>{book.title}</h2>
                 <p>Bookoins: {book.Bookoins}</p>
             </div>
         </div>

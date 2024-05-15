@@ -35,6 +35,8 @@ app.use("/api/v1/users/", UserRoutes);
 const BookRoutes = require("./src/api/routes/Book.routes");
 app.use("/api/v1/books/", BookRoutes);
 
+const WalletRoutes = require("./src/api/routes/Wallet.routes");
+app.use("/api/v1/wallet/", WalletRoutes);
 
 
 /* const CompanyRoutes = require("./src/api/routes/Company.routes");

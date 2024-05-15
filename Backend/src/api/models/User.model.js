@@ -34,10 +34,6 @@ const UserSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Wallet'
     },
-    bookCoins: {
-      type: Number,
-      default: 100,
-    },
     library: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Book'

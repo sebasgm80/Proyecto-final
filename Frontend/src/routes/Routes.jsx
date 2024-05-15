@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom"
 import  { App } from "../App"
 import { AddBook, Dashboard, Error, FormProfile, Home, Login, Profile, Register, BookDetails  } from "../pages"
 import { Protected } from "../components/ProtectedREoutes/Protected"
+import AllBooks from "../components/AllBooks"
 
 
 export const router = createBrowserRouter ([
@@ -20,6 +21,10 @@ export const router = createBrowserRouter ([
             {
                 path: "/login",
                 element: <Login />
+            },
+            {
+                path: "/books",
+                element: <AllBooks />
             },
             {
                 path: "/profile",

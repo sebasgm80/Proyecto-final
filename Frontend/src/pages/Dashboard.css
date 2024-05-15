@@ -1,0 +1,11 @@
+.dashboard-title {
+    display: flex;
+    flex-direction: trow;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    height: fit-content;
+    margin: 100px;
+    
+
+}

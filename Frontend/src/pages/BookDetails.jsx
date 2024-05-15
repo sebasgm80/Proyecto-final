@@ -33,7 +33,8 @@ export const BookDetails = () => {
       <p>{book.description}</p>
       <img src={book.image} alt={book.title} />
       <p>{book.Bookoins}</p>
-      <Link to="/dashboard"><button>Volver</button></Link>
+      <Link to="/dashboard"><button>Dashborad</button></Link>
+      <Link to="/books"><button>Todos los libros</button></Link>
     </div>
   );
 };
