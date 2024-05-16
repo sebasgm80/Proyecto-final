@@ -1,69 +1,46 @@
 import React, { useEffect, useState } from 'react';
-import { useAuth } from '../context/authContext';
-import { getWallet, addCoins, spendCoins } from '../services/wallet.service';
+import { getWallet } from '../services/wallet.service'; // Asegúrate de tener este servicio correctamente configurado
+import "./Wallet.css";
 
-export const Wallet = () => {
-  const { user } = useAuth();
-  const [wallet, setWallet] = useState(null);
-  const [amount, setAmount] = useState(0);
+const Wallet = () => {
+  const [wallet, setWallet] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
   useEffect(() => {
     const fetchWallet = async () => {
       try {
-        const data = await getWallet(user._id);
-        setWallet(data);
+        const data = await getWallet();
+        setWallet(data || []); // Asegurarse de que data siempre sea un arreglo
       } catch (error) {
-        setError(error.message);
+        setError(`Error: ${error.message}`);
       } finally {
         setLoading(false);
       }
     };
     fetchWallet();
-  }, [user]);
+  }, []);
 
-  const handleAddCoins = async () => {
-    try {
-      const updatedWallet = await addCoins(user._id, amount);
-      setWallet(updatedWallet);
-      setAmount(0);
-    } catch (error) {
-      setError(error.message);
-    }
-  };
-
-  const handleSpendCoins = async () => {
-    try {
-      const updatedWallet = await spendCoins(user._id, amount);
-      setWallet(updatedWallet);
-      setAmount(0);
-    } catch (error) {
-      setError(error.message);
-    }
-  };
-
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
+  if (loading) return <div className="loading-message">Cargando wallet...</div>;
+  if (error) return <div className="error-message">{error}</div>;
 
   return (
-    <div>
+    <div className="wallet-container">
       <h1>Wallet</h1>
-      {wallet ? (
-        <div>
-          <p>Balance: {wallet.balance}</p>
-          <ul>
-            {wallet.transactions.map((transaction, index) => (
-              <li key={index}>
-                {transaction.date}: {transaction.amount} ({transaction.type})
-              </li>
-            ))}
-          </ul>
-        </div>
+      {wallet.length > 0 ? (
+        <ul className="wallet-list">
+          {wallet.map((item) => (
+            <li key={item._id} className="wallet-card">
+              <h2>{item.title}</h2>
+              <p>Balance: {item.balance}</p>
+            </li>
+          ))}
+        </ul>
       ) : (
-        <p>No wallet found</p>
+        <p>No tienes transacciones en tu wallet.</p>
       )}
     </div>
   );
 };
 
+export default Wallet;

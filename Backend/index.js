@@ -1,68 +1,50 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const { connect } = require("./src/utils/db");
-
-// creamos el servidor web
-const app = express();
-
-// vamos a configurar dotenv para poder utilizar las variables del entorno del .env
+const cors = require("cors");
+const logger = require("./logger");
 dotenv.config();
-
-// conectamos con la base de datos
 connect();
 
-// middleware para configurar cloudinary
-const { configCloudinary } = require("./src/middleware/files.middleware");
+const app = express();
 
-configCloudinary();
+const PORT = process.env.PORT || 8080;
 
-// creamos el puerto
-
-const PORT = process.env.PORT;
-
-// CORS 
-const cors = require("cors");
-app.use(cors());
-
-// limitamos el tamaño de las peticiones
+// Middleware
 app.use(express.json({ limit: "5mb" }));
 app.use(express.urlencoded({ limit: "5mb", extended: false }));
+app.use(cors());
 
-// creamos las rutas
+// Configurar Cloudinary
+const { configCloudinary } = require("./src/middleware/files.middleware");
+configCloudinary();
+
+// Rutas
 const UserRoutes = require("./src/api/routes/User.routes");
-app.use("/api/v1/users/", UserRoutes);
-
 const BookRoutes = require("./src/api/routes/Book.routes");
-app.use("/api/v1/books/", BookRoutes);
-
-const WalletRoutes = require("./src/api/routes/Wallet.routes");
-app.use("/api/v1/wallet/", WalletRoutes);
-
-
-/* const CompanyRoutes = require("./src/api/routes/Company.routes");
-app.use("/api/v1/Companys/", CompanyRoutes);
-
 const MessageRoutes = require("./src/api/routes/Message.routes");
-app.use("/api/v1/message/", MessageRoutes); */
+const WalletRoutes = require("./src/api/routes/Wallet.routes");
 
-// creamos las rutas de error
+
+
+app.use("/api/v1/users", UserRoutes);
+app.use("/api/v1/books", BookRoutes);
+app.use("/api/v1/messages", MessageRoutes);
+app.use("/api/v1/wallet", WalletRoutes);
+
+// Rutas de error
 app.use("*", (req, res, next) => {
   const error = new Error("Route not found");
   error.status = 404;
+  logger.error(error.message);
   return next(error);
 });
 
 // Error del servidor 500
-app.use((error, req, res) => {
-  return res
-    .status(error.status || 500)
-    .json(error.message || "unexpected error");
+app.use((error, req, res, next) => {
+  logger.error(`Error: ${error.message}`); // Registrar el error
+  return res.status(error.status || 500).json({ message: error.message || "Unexpected error" });
 });
 
-//Escuchamos el puerto del servidor
-
-// Tecnologia de la cración del servidor
 app.disable("x-powered-by");
-app.listen(PORT, () =>
-  console.log(`✅ Servidor corriendo en http://localhost:${PORT}`)
-);
+app.listen(PORT, () => console.log(`✅ Servidor corriendo en http://localhost:${PORT}`));

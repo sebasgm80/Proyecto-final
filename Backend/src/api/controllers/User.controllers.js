@@ -26,6 +26,8 @@ const { generateToken } = require("../../utils/token");
 const randomPassword = require("../../utils/randomPassword");
 const enumOk = require("../../utils/enumOk");
 const { mongoose } = require("mongoose");
+const logger = require("../../../logger");
+
 
 dotenv.config();
 
@@ -422,37 +424,31 @@ const update = async (req, res, next) => {
     return next(error);
   }
 };
-
+// #region  delete
 //! -----------------------------------------------------------------------------
 //? ---------------------------------DELETE--------------------------------------
 //! -----------------------------------------------------------------------------
 
 const deleteUser = async (req, res, next) => {
-  const session = await mongoose.startSession(); // Iniciar una sesión de transacción
   try {
-    session.startTransaction();
     const { _id, image } = req.user;
 
     // Eliminar la wallet asociada
-    await Wallet.findOneAndDelete({ userId: _id }, { session });
+    await Wallet.findOneAndDelete({ userId: _id });
 
     // Obtener todos los libros del usuario para eliminar las imágenes
     const userBooks = await Book.find({ userId: _id });
 
     // Eliminar todos los libros asociados
-    await Book.deleteMany({ ownerId: _id }, { session });
+    await Book.deleteMany({ userId: _id });
 
-    // Eliminar el usuario
-    const userDeleteResult = await User.findByIdAndDelete(_id, { session });
-    if (!userDeleteResult) {
-      await session.abortTransaction();
-      session.endSession();
-      return res.status(404).json("User not found or not deleted");
-    }
-
-    // Eliminar la imagen del usuario de Cloudinary si es necesario
-    if (image) {
-      await deleteImgCloudinary(image);
+    // Eliminar los mensajes asociados al usuario
+    try {
+      const deleteResult = await Message.deleteMany({ $or: [{ buyerId: _id }, { sellerId: _id }] });
+      console.log(`Deleted ${deleteResult.deletedCount} messages`);
+    } catch (error) {
+      console.error('Error deleting messages:', error.message);
+      // Continuar, ya que la eliminación de mensajes no es crítica
     }
 
     // Eliminar las imágenes de los libros del usuario de Cloudinary
@@ -462,15 +458,29 @@ const deleteUser = async (req, res, next) => {
       }
     }
 
-    await session.commitTransaction(); // Confirmar todas las operaciones
-    session.endSession();
-    return res.status(200).json("User, wallet, and books deleted successfully");
+    // Eliminar el usuario
+    await User.findByIdAndDelete(_id);
+
+    if (await User.findById(_id)) {
+      // Si el usuario no se eliminó
+      return res.status(404).json("not deleted");
+    } else {
+      // Eliminar la imagen del usuario de Cloudinary si es necesario
+      if (image) {
+        await deleteImgCloudinary(image);
+      }
+
+      return res.status(200).json("ok delete");
+    }
   } catch (error) {
-    await session.abortTransaction();
-    session.endSession();
     return next(error);
   }
 };
+
+module.exports = {
+  deleteUser,
+};
+
 
 
 //! -----------------------------------------------------------------------------

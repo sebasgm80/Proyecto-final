@@ -5,12 +5,6 @@ const {
     getById,
     getAllBooksForUser,
     getAllBooks,
-    purchaseBook,
-    confirmPurchase,
-    getAll,
-    getByName,
-    update,
-    deleteBook,
     createBook,
 } = require("../controllers/Book.controllers");
 
@@ -27,14 +21,5 @@ BookRoutes.get("/:id", isAuth, getById);
 
 // Ruta para obtener todos los libros del usuario autenticado
 BookRoutes.get('/user/books', isAuth, getAllBooksForUser);
-
-// Comprar un libro
-BookRoutes.post("/:id/purchase", isAuth, purchaseBook);
-
-// Confirmar compra de un libro
-BookRoutes.post('/:Id/confirm', isAuth, confirmPurchase);
-
-
-
 
 module.exports = BookRoutes;

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { getAllBooks, purchaseBook } from '../services/book.service';
+import { getAllBooks } from '../services/book.service';
+import { purchaseBook } from '../services/message.service';
 import { useAuth } from "../context/authContext";
 import "./AllBooks.css";
 import { Link } from 'react-router-dom';
@@ -24,7 +25,7 @@ const AllBooks = () => {
           throw new Error('Datos de libros no válidos.');
         }
       } catch (error) {
-        setError(<h3>Error: {error.message}</h3>);
+        setError(`Error: ${error.message}`);
       } finally {
         setLoading(false);
       }
@@ -38,7 +39,7 @@ const AllBooks = () => {
       const book = books.find(book => book._id === bookId);
       setMessage(`Solicitud de compra enviada para el libro: ${book.title}`);
     } catch (error) {
-      setError(<h3>Error: {error.message}</h3>);
+      setError(`Error: ${error.message}`);
     }
   };
 
@@ -59,7 +60,7 @@ const AllBooks = () => {
               <h2>{book.title}</h2>
               <p className="author">Autor: {book.author?.name || 'Desconocido'}</p>
               <p>Género: {book.genre || 'Desconocido'}</p>
-              <p>Año: {book.year || 'Desconocido'}</p> 
+              <p>Año: {book.year || 'Desconocido'}</p>
               <p>BookCoins: {book.Bookoins}</p>
               {user && book.userId !== user._id && (
                 <button onClick={() => handlePurchase(book._id)}>Comprar</button>

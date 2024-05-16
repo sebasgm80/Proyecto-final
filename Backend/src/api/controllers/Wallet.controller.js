@@ -1,17 +1,17 @@
 const Wallet = require('../models/Wallet.model');
 
 const getWallet = async (req, res) => {
-    const { userId } = req.params;
     try {
-        const wallet = await Wallet.findOne({ userId });
-        if (!wallet) {
-            return res.status(404).json({ message: "Wallet not found" });
-        }
-        res.json(wallet);
+      const wallet = await Wallet.find({ userId: req.user._id });
+      return res.status(200).json(wallet);
     } catch (error) {
-        res.status(500).json({ message: "Error retrieving wallet", error: error.message });
+      console.error('Error retrieving wallet:', error);
+      return res.status(500).json({
+        message: 'Error retrieving wallet',
+        error: error.message,
+      });
     }
-};
+  };
 
 const addCoins = async (req, res) => {
     const { userId } = req.params;

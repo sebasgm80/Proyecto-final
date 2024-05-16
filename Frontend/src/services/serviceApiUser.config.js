@@ -1,16 +1,22 @@
 import axios from "axios";
-import  { updateToken } from "../utils"
+import { updateToken } from "../utils";
 
-const APIHeaders = {
-    Accept: "application/json",
-    "Content-Type": "application/json",
-    "Access-Control-Allow-Origin": "*",
-    Authorization: `Bearer ${updateToken()}`,
-};
-
+// Crear una instancia de Axios para la API de usuario
 export const APIuser = axios.create({
     baseURL: `http://localhost:8080/api/v1`,
-    headers: APIHeaders,
     timeout: 5000,
-})
+});
 
+// Interceptor para actualizar el token antes de cada solicitud
+APIuser.interceptors.request.use(
+    (config) => {
+        const token = updateToken();
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    }
+);
