@@ -11,7 +11,7 @@ const Wallet = () => {
     const fetchWallet = async () => {
       try {
         const data = await getWallet();
-        setWallet(data || []); // Asegurarse de que data siempre sea un arreglo
+        setWallet(data || []); 
       } catch (error) {
         setError(`Error: ${error.message}`);
       } finally {

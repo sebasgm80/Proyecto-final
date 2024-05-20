@@ -4,6 +4,7 @@ import { Navigate } from "react-router-dom";
 import { Uploadfile } from "../components";
 import { useCreateProductError } from "../hooks/useCreateProductError";
 import { createBook } from "../services/book.service";
+import "./AddProduct.css";
 
 
 export const AddBook = () => {
@@ -46,15 +47,17 @@ export const AddBook = () => {
     return (
         <>
         <form onSubmit={handleSubmit(formSubmit)}>
-            <h1>Add Book</h1>
-            <input {...register("title", { required: true })} placeholder="Title" />
-            {errors.title && <p>Title is required.</p>}
-            <input {...register("author")} placeholder="Author" />
-            <input {...register("genre")} placeholder="Genre" />
-            <input {...register("year")} placeholder="Year" type="number" />
-            <input {...register("pages", { required: true })} placeholder="Pages" type="number" />
-            <input {...register("image")} type="file" />
-            <button type="submit" disabled={send}>Add Book</button>
+            <h1>Añadir libro</h1>
+            <input {...register("title", { required: true })} placeholder="Titulo" />
+            {errors.title && <p>El campo es obligatorio</p>}
+            <input {...register("author")} placeholder="Autor" />
+            <input {...register("genre")} placeholder="Genero" />
+            <input {...register("year")} placeholder="Año" type="number" />
+            <input {...register("pages", { required: true })} placeholder="Paginas" type="number" />
+            {errors.pages && <p>El campo es obligatorio</p>}
+            <input {...register("image", { required: true })} type="file" />
+            {errors.image && <p>La imagen es obligatoria</p>}
+            <button type="submit" disabled={send}>Añadir libro</button>
         </form>
         </>
     );

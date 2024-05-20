@@ -1,9 +1,13 @@
 import { NavLink } from "react-router-dom";
 import "./Header.css";
 import { useAuth } from "../context/authContext";
+import { useWallet } from "../hooks/useWallet";
+
 
 export const Header = () => {
     const { user, logout } = useAuth();
+    const { balance } = useWallet();
+    
     return (
         <header className="transparent-header">
             <div className="titleFatherContainer">
@@ -29,6 +33,7 @@ export const Header = () => {
                             <button className="btn btn-solid">Dashboard</button>
                         </NavLink>
                         <button className="btn btn-transparent" onClick={logout}>Logout</button>
+                        <button className="BK">BK<br/>{balance}</button>
                         <NavLink to="/profile">
                             <img
                                 className="profileCircle"

@@ -7,7 +7,7 @@ export const Dashboard = () => {
     return (
         <>
         <div>
-            <h1 className="dashboard-title">Este es el dashboard donde puedes ver tus libros</h1>
+            <h2 className="dashboard-title">Este es el dashboard donde puedes ver tus libros</h2>
             <BooksList/>
         </div>
         </>

@@ -44,7 +44,7 @@ const AllBooks = () => {
   };
 
   if (loading) return <div className="loading-message">Cargando libros...</div>;
-  if (error) return <div className="error-message">{error}</div>;
+  if (error) return <div className="error-message"><h2 className="error-title">No hay libros en la base de datos</h2></div>;
   if (message) return <div className="message">{message}</div>;
 
   return (

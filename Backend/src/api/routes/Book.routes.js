@@ -6,6 +6,8 @@ const {
     getAllBooksForUser,
     getAllBooks,
     createBook,
+    deleteBook,
+    updateBook
 } = require("../controllers/Book.controllers");
 
 const BookRoutes = require("express").Router();
@@ -21,5 +23,11 @@ BookRoutes.get("/:id", isAuth, getById);
 
 // Ruta para obtener todos los libros del usuario autenticado
 BookRoutes.get('/user/books', isAuth, getAllBooksForUser);
+
+// Ruta para actualizar un libro
+BookRoutes.patch("/update/:id", isAuth, upload.single("image"), updateBook);
+
+// Ruta para eliminar un libro
+BookRoutes.delete("/delete/:id", isAuth, deleteBook);
 
 module.exports = BookRoutes;

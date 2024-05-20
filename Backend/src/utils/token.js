@@ -7,7 +7,7 @@ const generateToken = (id, email) => {
     throw new Error("Email or id are missing");
   }
 
-  return jwt.sign({ id, email }, process.env.JWT_SECRET, { expiresIn: "1d" });
+  return jwt.sign({ id, email }, process.env.JWT_SECRET, { expiresIn: "7d" });
 };
 
 const verifyToken = (token) => {

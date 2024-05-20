@@ -1,5 +1,6 @@
 import { APIuser } from "./serviceApiUser.config";
 
+
 // Crear un nuevo libro
 export const createBook = async (formData) => {
     try {
@@ -45,3 +46,27 @@ export const getAllBooks = async () => {
         throw new Error(error.response?.data?.message || 'Error retrieving books');
     }
 };
+
+// Actualizar un libro
+export const updateBook = async (bookId, formData) => {
+    try {
+      const response = await APIuser.patch(`/books/update/${bookId}`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error updating book:", error.response ? error.response.data : error.message);
+      throw error;
+    }
+  };
+
+// Eliminar un libro
+export const deleteBook = async (bookId) => {
+    try {
+        const response = await APIuser.delete(`/books/delete/${bookId}`);
+        return response.data;
+    } catch (error) {
+        console.error("Error deleting book:", error.response ? error.response.data : error.message);
+        throw error;
+    }
+}
