@@ -4,7 +4,7 @@ const { deleteImgCloudinary } = require("../../middleware/files.middleware");
 
 
 const calcularBookoins = (pages) => {
-  return pages * 0.1; // Lógica para calcular los Bookoins
+  return Math.round(pages * 0.1) // Lógica para calcular los Bookoins
 };
 
 const createBook = async (req, res) => {
@@ -46,7 +46,7 @@ const createBook = async (req, res) => {
 const getById = async (req, res) => {
   try {
     const { id } = req.params;
-    const bookById = await Book.findById(id);
+    const bookById = await Book.findById(id).populate('userId', 'name');
     if (bookById) {
       return res.status(200).json(bookById);
     } else {

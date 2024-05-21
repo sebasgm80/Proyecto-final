@@ -32,3 +32,14 @@ export const confirmPurchase = async (messageId) => {
         throw new Error(error.response?.data?.message || 'Error confirming purchase');
     }
 };
+
+// Rechazar una compra de un libro
+export const rejectPurchase = async (messageId) => {
+    try {
+        const response = await APIuser.post(`/messages/${messageId}/reject`);
+        return response.data;
+    } catch (error) {
+        console.error('Error rejecting purchase:', error.response ? error.response.data : error.message);
+        throw new Error(error.response?.data?.message || 'Error rejecting purchase');
+    }
+};

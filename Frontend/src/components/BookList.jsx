@@ -61,9 +61,10 @@ const BooksList = () => {
     };
 
     if (loading) return <div>Cargando libros...</div>;
-    if (error) return <div>{error}</div>; // Mostrar mensajes de error o biblioteca vacía
+    if (error) return <div>{error}</div>; 
 
     return (
+        <>
         <div className="books-container">
             {books.map(book => (
                 <div className="book-card" key={book._id}>
@@ -71,19 +72,22 @@ const BooksList = () => {
                         <img src={book.image || 'path/to/default-image.jpg'} alt={`Portada de ${book.title}`} />
                     </Link>
                     <div className="book-info">
-                        <h2><Link to={`/book/${book._id}`}>{book.title}</Link></h2>
-                        <p>Bookoins: {book.Bookoins}</p>
+                        <h2>{book.title}</h2>
+                        <p className='BK1'>Bookoins: {book.Bookoins}</p>
                         <div className="book-actions">
                             <Link to={`/update/${book._id}`}>
-                                <button>Actualizar</button>
+                                <button className='data-button'>Actualizar</button>
                             </Link>
-                            <button onClick={() => handleDelete(book)}>Eliminar</button>
+                            <button className='data-button' onClick={() => handleDelete(book)}>Eliminar</button>
                         </div>
                     </div>
                 </div>
             ))}
         </div>
+        </>
     );
+    
 };
+
 
 export default BooksList;

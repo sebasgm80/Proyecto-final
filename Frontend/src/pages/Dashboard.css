@@ -9,3 +9,14 @@
     
 
 }
+
+.book-details {
+    height: 85vh;
+    display: flex;
+    flex-direction: trow;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    height: fit-content;
+    margin: 10px;
+}

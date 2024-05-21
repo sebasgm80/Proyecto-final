@@ -2,84 +2,72 @@ import "./Uploadfile.css";
 import { useEffect } from "react";
 
 export const Uploadfile = () => {
-  const ekUpload = () => {
-    const Init = () => {
-      var fileSelect = document.getElementById("file-upload");
-      fileSelect.addEventListener("change", fileSelectHandler, false);
-    };
+  const initUpload = () => {
+    const fileSelect = document.getElementById("file-upload");
+    fileSelect.addEventListener("change", fileSelectHandler, false);
+  };
 
-    const fileDragHover = (e) => {
-      let fileDrag = document.getElementById("file-drag");
+  const fileDragHover = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    const fileDrag = document.getElementById("file-drag");
+    fileDrag.className = e.type === "dragover" ? "hover" : "modal-body file-upload";
+  };
 
-      e.stopPropagation();
-      e.preventDefault();
-
-      fileDrag.className =
-        e.type === "dragover" ? "hover" : "modal-body file-upload";
-    };
-
-    const fileSelectHandler = (e) => {
-      // Fetch FileList object
-      let files = e.target.files || e.dataTransfer.files;
-
-      // Cancel event and hover styling
-      fileDragHover(e);
-
-      // Process all File objects
-      for (let i = 0, f; (f = files[i]); i++) {
-        parseFile(f);
-      }
-    };
-
-    // Output
-    const output = (msg) => {
-      // Response
-      let m = document.getElementById("messages");
-      m.innerHTML = msg;
-    };
-
-    function parseFile(file) {
-      output("<strong>" + encodeURI(file.name) + "</strong>");
-      let imageName = file.name;
-
-      let isGood = /\.(?=gif|jpg|png|jpeg|webp)/gi.test(imageName);
-      if (isGood) {
-        document.getElementById("start").classList.add("hidden");
-        document.getElementById("response").classList.remove("hidden");
-        document.getElementById("notimage").classList.add("hidden");
-        // Thumbnail Preview
-        document.getElementById("file-image").classList.remove("hidden");
-        document.getElementById("file-image").src = URL.createObjectURL(file);
-      } else {
-        document.getElementById("file-image").classList.add("hidden");
-        document.getElementById("notimage").classList.remove("hidden");
-        document.getElementById("start").classList.remove("hidden");
-        document.getElementById("response").classList.add("hidden");
-        document.getElementById("file-upload-form").reset();
-      }
+  const fileSelectHandler = (e) => {
+    const files = e.target.files || e.dataTransfer.files;
+    fileDragHover(e);
+    for (let i = 0; i < files.length; i++) {
+      parseFile(files[i]);
     }
-    if (window.File && window.FileList && window.FileReader) {
-      Init();
+  };
+
+  const output = (msg) => {
+    const messages = document.getElementById("messages");
+    messages.innerHTML = msg;
+  };
+
+  const parseFile = (file) => {
+    output(`<strong>${encodeURI(file.name)}</strong>`);
+    const isGood = /\.(gif|jpg|png|jpeg|webp)$/i.test(file.name);
+    const start = document.getElementById("start");
+    const response = document.getElementById("response");
+    const notImage = document.getElementById("notimage");
+    const fileImage = document.getElementById("file-image");
+
+    if (isGood) {
+      start.classList.add("hidden");
+      response.classList.remove("hidden");
+      notImage.classList.add("hidden");
+      fileImage.classList.remove("hidden");
+      fileImage.src = URL.createObjectURL(file);
     } else {
-      document.getElementById("file-drag").style.display = "none";
+      fileImage.classList.add("hidden");
+      notImage.classList.remove("hidden");
+      start.classList.remove("hidden");
+      response.classList.add("hidden");
+      document.getElementById("file-upload-form").reset();
     }
   };
 
   useEffect(() => {
-    ekUpload();
-  });
+    if (window.File && window.FileList && window.FileReader) {
+      initUpload();
+    } else {
+      document.getElementById("file-drag").style.display = "none";
+    }
+  }, []);
 
   return (
     <div id="file-upload-form" className="uploader">
       <input id="file-upload" type="file" name="image" accept="image/*" />
-
       <label htmlFor="file-upload" id="file-drag">
         <img id="file-image" src="#" alt="Preview" className="hidden" />
         <div id="start">
           <i className="fa fa-download" aria-hidden="true"></i>
           <div className="divSelect">Seleccione un archivo o arrástrelo aquí</div>
           <div id="notimage" className="hidden">
-            Please select an image
+            Por favor seleccione una imagen
           </div>
           <span id="file-upload-btn" className="btn btn-primary">
             Seleccione un archivo

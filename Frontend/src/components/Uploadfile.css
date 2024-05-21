@@ -4,8 +4,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    padding: 20px;
+    justify-content:space-between;
+    padding: 10px;
     border: 2px dashed #ccc;
     border-radius: 5px;
     background-color: #f9f9f9;
@@ -15,7 +15,7 @@
 }
 
 #file-image {
-    max-width: 100%; /* Limita el ancho de la imagen al ancho de su contenedor */
+    max-width: 5rem; /* Limita el ancho de la imagen al ancho de su contenedor */
     height: auto; /* Mantiene la proporción de la imagen */
     margin-top: 10px; /* Espacio entre el texto y la imagen */
     border-radius: 5px;

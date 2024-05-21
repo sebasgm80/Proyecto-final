@@ -1,16 +1,12 @@
-import { useEffect, useState } from "react"
-import Messages from "../components/Messages"
-import Wallet from "../components/Wallet"
+import { useEffect, useState } from "react";
+import Messages from "../components/Messages";
 
-import "./Profile.css"
-import { Link } from "react-router-dom"
-import { useWallet } from "../hooks/useWallet"
-
-
+import "./Profile.css";
+import { Link } from "react-router-dom";
+import { useWallet } from "../hooks/useWallet";
 
 export const Profile = () => {
   const [user, setUser] = useState({});
-
   const { balance } = useWallet();
 
   useEffect(() => {
@@ -22,24 +18,17 @@ export const Profile = () => {
 
   return (
     <>
-    <div className="profile-container">
-    <img src={user.image} alt="User Profile" className="profile-image" />
-    <h2 className="name">Nombre: {user.user}</h2>
-    <p className="email">Email: {user.email}</p>
-    <p className="balance">Bookoins {balance}</p>
-    </div>
-    
-
-
-    
-      
-      <div className="wallet-section">
-        <Wallet />
+      <div className="profile-container">
+        <img src={user.image} alt="User Profile" className="profile-image" />
+        <h2 className="name">Nombre: {user.user}</h2>
+        <p className="email">Email: {user.email}</p>
+        <p className="balance">Bookoins: {balance}</p>
       </div>
-      <div className="messages-section">
+
+      <div className="messages-section card">
         <Messages />
       </div>
-      <div className="links-section">
+      <div className="links-section card">
         <Link to="/formProfile" className="profile-link">
           Form Profile
         </Link>
@@ -47,7 +36,6 @@ export const Profile = () => {
           Add Product
         </Link>
       </div>
-    
     </>
   );
 };

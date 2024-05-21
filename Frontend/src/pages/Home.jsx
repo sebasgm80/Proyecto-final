@@ -1,8 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import "./Home.css"; 
 
-
-
 export const Home = () => {
     const navigate = useNavigate();
 
@@ -17,18 +15,12 @@ export const Home = () => {
                         <p className="hero-bonus">¡Regístrate ahora y recibe <b>100 Bookoins</b> para empezar a leer tus primeros libros!</p>
                         <button onClick={() => navigate('/register')} className="join-now-button">Únete Ahora</button>
                     </div>
-                    
                 </div>
-
                 <div className="hero-footer">
                     <h2>⬇️ Sigue bajando para ver como funciona ⬇️</h2>
                 </div>
             </section>
-
-            
-
             <section className="how-it-works">
-                
                 <div className="steps">
                     <div className="step">
                         <h2>1. Regístrate</h2>
@@ -48,10 +40,7 @@ export const Home = () => {
                     </div>
                 </div>
             </section>
-
             <button onClick={() => navigate('/register')} className="join-now-button">Únete Ahora</button>
-
-            
         </>
     );
 }

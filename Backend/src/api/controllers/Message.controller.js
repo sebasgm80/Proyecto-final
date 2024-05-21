@@ -5,7 +5,6 @@ const Wallet = require("../models/Wallet.model");
 const logger = require("../../../logger");
 const { mongoose } = require("mongoose");
 
-
 const getMessages = async (req, res) => {
   try {
     const messages = await Message.find({ sellerId: req.user._id, status: 'pending' })
@@ -71,9 +70,10 @@ const confirmPurchase = async (req, res) => {
       return res.status(403).json({ message: 'No tienes permiso para confirmar esta compra' });
     }
 
-    const buyer = await User.findById(message.buyerId);
-    const sellerWallet = await Wallet.findOne({ userId: sellerId });
-    const buyerWallet = await Wallet.findOne({ userId: buyer._id });
+    const buyer = await User.findById(message.buyerId).session(session);
+    const seller = await User.findById(sellerId).session(session);
+    const sellerWallet = await Wallet.findOne({ userId: sellerId }).session(session);
+    const buyerWallet = await Wallet.findOne({ userId: buyer._id }).session(session);
 
     if (buyerWallet.balance < message.bookId.Bookoins) {
       await session.abortTransaction();
@@ -89,6 +89,13 @@ const confirmPurchase = async (req, res) => {
 
     message.bookId.userId = buyer._id;
     await message.bookId.save({ session });
+
+    // Actualizar la biblioteca del vendedor y del comprador
+    seller.library.pull(message.bookId._id);
+    buyer.library.push(message.bookId._id);
+
+    await seller.save({ session });
+    await buyer.save({ session });
 
     message.status = 'accepted';
     await message.save({ session });
@@ -108,8 +115,37 @@ const confirmPurchase = async (req, res) => {
   }
 };
 
+const rejectPurchase = async (req, res) => {
+  const { id } = req.params;
+  const sellerId = req.user._id;
+
+  try {
+    const message = await Message.findById(id);
+    if (!message) {
+      return res.status(404).json({ message: 'Solicitud no encontrada' });
+    }
+
+    if (message.sellerId.toString() !== sellerId.toString()) {
+      logger.error('No tienes permiso para rechazar la compra de este libro');
+      return res.status(403).json({ message: 'No tienes permiso para rechazar esta compra' });
+    }
+
+    message.status = 'rejected';
+    await message.save();
+
+    return res.status(200).json({ message: 'Compra rechazada' });
+  } catch (error) {
+    console.error('Error al rechazar la compra:', error);
+    return res.status(500).json({
+      error: 'Error al rechazar la compra',
+      message: error.message,
+    });
+  }
+};
+
 module.exports = {
   getMessages,
   purchaseBook,
   confirmPurchase,
+  rejectPurchase,
 };

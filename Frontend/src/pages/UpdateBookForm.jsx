@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 import { getBookDetails, updateBook } from '../services/book.service';
+import './UpdateBookForm.css';
 
 const UpdateBookForm = () => {
-  const { bookId } = useParams(); // Usa `bookId` para que coincida con la ruta
+  const { bookId } = useParams();
   const [book, setBook] = useState({
     title: '',
     author: '',
@@ -14,12 +16,13 @@ const UpdateBookForm = () => {
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [imagePreview, setImagePreview] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchBookDetails = async () => {
       try {
-        const data = await getBookDetails(bookId); // Usa `bookId` para la solicitud
+        const data = await getBookDetails(bookId);
         setBook({
           title: data.title || '',
           author: data.author || '',
@@ -28,6 +31,7 @@ const UpdateBookForm = () => {
           pages: data.pages || '',
           image: data.image || ''
         });
+        setImagePreview(data.image || '');
         setLoading(false);
       } catch (error) {
         setError('No se pudo cargar la información del libro.');
@@ -46,13 +50,41 @@ const UpdateBookForm = () => {
     }));
   };
 
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+        setBook((prevBook) => ({
+          ...prevBook,
+          image: reader.result
+        }));
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setImagePreview(book.image);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    Swal.fire({
+      title: 'Actualizando libro...',
+      text: 'Por favor, espera mientras se actualiza el libro.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      }
+    });
+
     try {
-      await updateBook(bookId, book); // Usa `bookId` y `book` para la actualización
+      await updateBook(bookId, book);
+      Swal.fire('¡Éxito!', 'El libro se ha actualizado correctamente', 'success');
       navigate('/dashboard');
     } catch (error) {
       setError('No se pudo actualizar el libro. Por favor, intenta de nuevo más tarde.');
+      Swal.fire('Error', 'No se pudo actualizar el libro. Intenta de nuevo.', 'error');
     }
   };
 
@@ -77,13 +109,19 @@ const UpdateBookForm = () => {
         onChange={handleChange}
         placeholder="Autor"
       />
-      <input
-        type="text"
-        name="genre"
-        value={book.genre}
-        onChange={handleChange}
-        placeholder="Género"
-      />
+      <select name="genre" value={book.genre} onChange={handleChange} required>
+        <option value="">Selecciona un género</option>
+        <option value="Fiction">Ficción</option>
+        <option value="Non-Fiction">No Ficción</option>
+        <option value="Science">Ciencia</option>
+        <option value="History">Historia</option>
+        <option value="Poetry">Poesía</option>
+        <option value="Fantasy">Fantástica</option>
+        <option value="Mistery">Misterio</option>
+        <option value="Romance">Romance</option>
+        <option value="Thriller">Thriller</option>
+        <option value="Horror">Horror</option>
+      </select>
       <input
         type="number"
         name="year"
@@ -100,13 +138,12 @@ const UpdateBookForm = () => {
         required
       />
       <input
-        type="text"
+        type="file"
         name="image"
-        value={book.image}
-        onChange={handleChange}
-        placeholder="URL de la imagen"
+        onChange={handleImageChange}
       />
-      <button type="submit">Actualizar libro</button>
+      {imagePreview && <img src={imagePreview} alt="Vista previa de la imagen" className="image-preview" />}
+      <button className="update-book-button" type="submit">Actualizar libro</button>
     </form>
   );
 };
