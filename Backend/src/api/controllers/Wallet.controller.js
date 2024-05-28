@@ -7,6 +7,7 @@ const getWallet = async (req, res) => {
     } catch (error) {
       console.error('Error retrieving wallet:', error);
       return res.status(500).json({
+      
         message: 'Error retrieving wallet',
         error: error.message,
       });
