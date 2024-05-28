@@ -87,7 +87,7 @@ export const FormProfile = () => {
             <Uploadfile />
             <div className="btn_container">
               <button
-                className="btn"
+                className="btn_profile"
                 type="submit"
                 disabled={send}
                 style={{ background: send ? "#49c1a388" : "#49c1a2" }}
@@ -97,7 +97,7 @@ export const FormProfile = () => {
             </div>
           </form>
         </div>
-      <div className="termsprivace" onClick={() => useDeleteUser(setUser, logout)}><button className="btn">DELETE USER</button></div>
+      <div className="btn_container" onClick={() => useDeleteUser(setUser, logout)}><button className="btn_delete">DELETE USER</button></div>
               </div>
         <Link to="/terms" className="termsprivace">Terminos y condiciones</Link>
         <Link to="/privace" className="termsprivace">Politica de privacidad</Link>
