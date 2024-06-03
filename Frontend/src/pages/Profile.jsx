@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Messages from "../components/Messages";
 
 import "./Profile.css";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { useWallet } from "../hooks/useWallet";
 
 export const Profile = () => {
@@ -30,10 +30,13 @@ export const Profile = () => {
       </div>
       <div className="links-section card">
         <Link to="/formProfile" className="profile-link">
-          Form Profile
+          Editar perfil
         </Link>
         <Link to="/addProduct" className="profile-link">
-          Add Product
+          Añadir libro
+        </Link>
+        <Link to="/transacctions" className="profile-link">
+          Transacciones
         </Link>
       </div>
     </>

@@ -58,3 +58,15 @@ export const getUserBookoins = async () => {
       throw error;
   }
 }
+
+// Obtener todos los usuarios
+
+export const getUsersWithBooks = async () => {
+  try {
+      const response = await APIuser.get("/users/with-books");
+      return response.data;
+  } catch (error) {
+      console.error("Error retrieving users with books:", error.response ? error.response.data : error.message);
+      throw new Error(error.response?.data?.message || "Error retrieving users with books");
+  }
+};

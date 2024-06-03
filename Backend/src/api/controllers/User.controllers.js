@@ -538,6 +538,28 @@ const followUserToggle = async (req, res, next) => {
   }
 };
 
+const getUsersWithBooks = async (req, res) => {
+  try {
+      const users = await User.find()
+          .select('nick email name')
+          .populate({
+              path: 'library',
+              select: 'title'
+          });
+
+      const usersWithBookCounts = users.map(user => {
+          const userObj = user.toObject();
+          userObj.bookCount = user.library.length;
+          return userObj;
+      });
+
+      return res.status(200).json(usersWithBookCounts);
+  } catch (error) {
+      console.error("Error al obtener los usuarios:", error);
+      return res.status(500).json({ message: "Error al obtener los usuarios", error: error.message });
+  }
+};
+
 
 
 
@@ -551,4 +573,5 @@ module.exports = {
   update,
   deleteUser,
   followUserToggle,
+  getUsersWithBooks,
 };

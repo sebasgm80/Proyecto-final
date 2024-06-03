@@ -2,6 +2,7 @@ const Message = require("../models/Message.model");
 const Book = require("../models/Book.model");
 const User = require("../models/User.model");
 const Wallet = require("../models/Wallet.model");
+const Transaction = require("../models/Transaction.model");
 const logger = require("../../../logger");
 const { mongoose } = require("mongoose");
 
@@ -38,7 +39,18 @@ const purchaseBook = async (req, res) => {
 
     await message.save();
 
-    return res.status(200).json({ message: 'Solicitud de compra enviada' });
+    // Crear una transacción pendiente
+    const transaction = new Transaction({
+      bookId: book._id,
+      buyerId: buyerId,
+      sellerId: book.userId,
+      amount: book.Bookoins, // Suponiendo que Bookoins es la cantidad a transferir
+      status: 'pending'
+    });
+
+    await transaction.save();
+
+    return res.status(200).json({ message: 'Solicitud de compra enviada', transaction });
   } catch (error) {
     console.error('Error al realizar la compra:', error);
     return res.status(500).json({
@@ -100,10 +112,15 @@ const confirmPurchase = async (req, res) => {
     message.status = 'accepted';
     await message.save({ session });
 
+    // Actualizar el estado de la transacción
+    const transaction = await Transaction.findOne({ bookId: message.bookId._id, buyerId: buyer._id, sellerId: seller._id }).session(session);
+    transaction.status = 'completed';
+    await transaction.save({ session });
+
     await session.commitTransaction();
     session.endSession();
 
-    return res.status(200).json({ message: 'Compra confirmada' });
+    return res.status(200).json({ message: `Compra confirmada para el libro ${message.bookId.title}` });
   } catch (error) {
     await session.abortTransaction();
     session.endSession();
@@ -120,7 +137,7 @@ const rejectPurchase = async (req, res) => {
   const sellerId = req.user._id;
 
   try {
-    const message = await Message.findById(id);
+    const message = await Message.findById(id).populate('bookId');
     if (!message) {
       return res.status(404).json({ message: 'Solicitud no encontrada' });
     }
@@ -132,6 +149,11 @@ const rejectPurchase = async (req, res) => {
 
     message.status = 'rejected';
     await message.save();
+
+    // Actualizar el estado de la transacción
+    const transaction = await Transaction.findOne({ bookId: message.bookId._id, buyerId: message.buyerId, sellerId: message.sellerId });
+    transaction.status = 'failed';
+    await transaction.save();
 
     return res.status(200).json({ message: 'Compra rechazada' });
   } catch (error) {

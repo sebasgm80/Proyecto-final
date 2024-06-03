@@ -4,6 +4,7 @@ import { AddBook, Dashboard, Error, FormProfile, Home, Login, Profile, Register,
 import { Protected } from "../components/ProtectedREoutes/Protected"
 import AllBooks from "../components/AllBooks"
 import UpdateBookForm from "../pages/UpdateBookForm"
+import Transactions from "../components/Transaction"
 
 UpdateBookForm
 export const router = createBrowserRouter ([
@@ -76,6 +77,16 @@ export const router = createBrowserRouter ([
                     </Protected>
                 )
             },
+
+            {
+                path: "/transacctions",
+                element: (
+                    <Protected>
+                        <Transactions />
+                    </Protected>
+                )
+            },
+
             {
                 path: "*",
                 element: <Error />

@@ -6,6 +6,7 @@ const {
   login,
   update,
   deleteUser,
+  getUsersWithBooks,
 } = require("../controllers/User.controllers");
 
 const UserRoutes = express.Router();
@@ -20,5 +21,8 @@ UserRoutes.post("/login", login);
 UserRoutes.use(isAuth);
 UserRoutes.delete("/", deleteUser); // Eliminar usuario
 UserRoutes.patch("/user/update", upload.single("image"), update); // Actualizar usuario
+
+// Obtener usuarios con sus libros
+UserRoutes.get("/with-books", isAuth, getUsersWithBooks);
 
 module.exports = UserRoutes;

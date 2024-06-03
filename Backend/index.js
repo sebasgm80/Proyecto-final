@@ -24,6 +24,7 @@ const UserRoutes = require("./src/api/routes/User.routes");
 const BookRoutes = require("./src/api/routes/Book.routes");
 const MessageRoutes = require("./src/api/routes/Message.routes");
 const WalletRoutes = require("./src/api/routes/Wallet.routes");
+const TransactionRoutes = require("./src/api/routes/Transaction.routes");
 
 
 
@@ -31,6 +32,7 @@ app.use("/api/v1/users", UserRoutes);
 app.use("/api/v1/books", BookRoutes);
 app.use("/api/v1/messages", MessageRoutes);
 app.use("/api/v1/wallet", WalletRoutes);
+app.use("/api/v1/transactions", TransactionRoutes);
 
 // Rutas de error
 app.use("*", (req, res, next) => {

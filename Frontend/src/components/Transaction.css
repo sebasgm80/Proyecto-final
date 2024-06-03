@@ -1,0 +1,64 @@
+/* Transaction.css */
+
+.transaction-container {
+    width: 900px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.8);
+    border-radius: 8px;
+    font-family: Arial, sans-serif;
+}
+
+.transaction-header {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.transaction-list {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.transaction-list th, .transaction-list td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.transaction-list th {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.transaction-item {
+    background-color: #fff;
+}
+
+.transaction-item:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.transaction-status.pending {
+    background-color: #ff9800;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.transaction-status.completed {
+    background-color: #4CAF50;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.transaction-status.failed {
+    background-color: #f44336;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
