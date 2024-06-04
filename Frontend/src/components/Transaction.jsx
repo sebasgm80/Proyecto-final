@@ -33,7 +33,7 @@ const Transactions = () => {
             ) : (
                 <table className="transaction-list">
                     <thead>
-                        <tr>
+                        <tr className="transaction-list-header">
                             <th>Libro</th>
                             <th>Comprador</th>
                             <th>Vendedor</th>
@@ -41,7 +41,7 @@ const Transactions = () => {
                             <th>Estado</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody className="transaction-list-body">
                         {transactions.map(({ _id, bookId, buyerId, sellerId, amount, status }) => (
                             <tr key={_id} className="transaction-item">
                                 <td>{bookId?.title || 'N/A'}</td>

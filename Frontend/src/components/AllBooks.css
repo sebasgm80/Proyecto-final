@@ -39,7 +39,7 @@
   border: 1px solid #ddd;
   overflow: hidden;
   width: 100%;
-  max-width: 300px;
+  max-width: 200px;
   padding: 15px;
   transition: transform 0.3s;
 }
@@ -47,7 +47,7 @@
 
 
 .book-card img {
-  max-width: 100%;
+  max-width: 200px;
   height: auto;
   border-radius: 10px;
   margin-bottom: 15px;
